@@ -8,26 +8,30 @@
 
 <body>
 
+
     <div id="game">
-        <p>It's a hangman game</p>
-        <p>Type 'S' to Start</p>
+        <p>It's a hangman Game! Type 's' to begin. </p>
     </div>
 
     <script type="text/javascript">
 
 
-
-
-
         //Global Vars
-
+        var userInput;
+        var gameStarted = false;
         //Create a list of words to be chosen from randomly
-        var hangmanWordlist = ["and"];
+        var hangmanWordlist = ["and", "terrible"];
         var hangmanUsedWords = [];
-        var guessedLetters = [];
-        var partialWord = "";
+        var currentWord = "";
+        var currentWordArray = [];
 
-        var partialWordConstruction = "";
+        var blankLetter = "#";
+        var wordConstructionArray = [];
+
+        var guessedLetters = [];
+
+        //Counters used in for loops
+        var correctLetterFound = 0;
 
         //Store used words in a fresh array... this might be better as a local variable
 
@@ -35,65 +39,81 @@
 
         var wins = 0;
         var hangmanDeath = 0;
+        var score = 0;
+
+        function wordGenerator() {
+
+            //Get a random word from dictionary.
+            var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
+            console.log(currentWord);
+            //Turn currentWord into a blank-space partial-word array
+            for (var i = 0; i < currentWord.length; i++) {
+                currentWordArray.push(currentWord.charAt(i));
+                wordConstructionArray.push(blankLetter);
+            }
+        }
+
+
+        function letterGuessUsed(input) {
+            console.log("You pressed: " + userInput);
+            console.log("Guessed Letters List Length: " + guessedLetters.length);
+            //check if input letter is already in the guessed letter array
+            for (var i = 0; i < guessedLetters.length; i++) {
+                if (input === guessedLetters[i]) {
+                    console.log("You guessed this letter already");
+                    console.log("Guessed letters: " + guessedLetters[i]);
+                } else {
+                    console.log("This is a new guess");
+                    guessedLetters.push(input);
+                    newGuess = true;
+                }
+            };
+
+            if (guessedLetters.length === 0) {
+                console.log("This is a new guess");
+                guessedLetters.push(input);
+                console.log("Guessed Letters NEW List Length: " + guessedLetters.length);
+                newGuess = true;
+            }
+            console.log("Guessed Letters NEW List Length: " + guessedLetters.length);
+
+        }
 
         // This function is run whenever the user presses a key.
         document.onkeyup = function (event) {
 
             // Determines which key was pressed.
-            var userInput = event.key;
+            userInput = event.key;
+            console.log("Game Started: " + gameStarted);
+
+            //press S to Start the Game
+            if ((userInput === "s") && (gameStarted === false)) {
+                //Start Game
+                wordGenerator();
+                gameStarted = true;
+                console.log("Game Started: " + gameStarted);
+
+            };
+
+            //Main Game Code
+            if (gameStarted) {
+
+                //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
+                letterGuessUsed(userInput);
+
+                //2.  If Letter has NOT been tried already, replace all indices of this letter in the correct array.  
+                //3. If no indices are replaced, hangman gets +1 closer to death.  
+
+                console.log("Hangman is this close to death: " + hangmanDeath);
+                for (var i=0; i<=guessedLetters.length; i++) {
+                    console.log("Guessed letters so far: " + guessedLetters[i]);
+                }
 
 
-            //start game if letter is "s"
-            if (userInput === "s") {
-
-                //Get a random word from the dictionary array
-                var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
-                console.log(currentWord);
-
-                //Create a 'dummy' blank word with the same number of characters.  
-                for (i = 0; i < currentWord.length; i++) {
-                    partialWord += "#";
-                };
-
-                console.log("Let's play.  Here's your first word: " + partialWord);
-
-                userInput = prompt("Here's your word " + partialWord + " Guess a letter");
-
-
-                console.log(userInput);
-                console.log(typeof userInput);
-                console.log(userInput === currentWord.charAt(0));
-
-                for (i = 0; i < currentWord.length; i++) {
-
-                    if (userInput === currentWord.charAt(i)) {
-
-                        //Test if the correct letter has already been used/Replaced '#'
-                        for (j = 0; j < partialWord.length; j++) {
-                            
-                            console.log("partialWord.charAt(j): " + partialWord.charAt(j)); 
-                            if (userInput === partialWord.charAt(j)) {
-                                
-                                //We want to rebuild the partialWordConstructor, but in this case, no score is added as user has chosen this letter already
-                                partialWord += userInput;
-
-                            } else {
-
-                                //User has chosen both a correct letter and an unused letter
-                                partialWord += currentWord.charAt(i);
-                                console.log("You got it!");
-                            }
-                        }
-
-
-                    } else {
-                        partialWord += "#";
-                    }
-                };
-
-                console.log(partialWord);
             }
+
         };
+
 
 
     </script>
