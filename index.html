@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MNMLHNGMN</title>
+</head>
+
+<body>
+
+    <div id="game">
+        <p>It's a hangman game</p>
+        <p>Type 'S' to Start</p>
+    </div>
+
+    <script type="text/javascript">
+
+
+
+
+
+        //Global Vars
+
+        //Create a list of words to be chosen from randomly
+        var hangmanWordlist = ["and"];
+        var hangmanUsedWords = [];
+        var guessedLetters = [];
+        var partialWord = "";
+
+        var partialWordConstruction = "";
+
+        //Store used words in a fresh array... this might be better as a local variable
+
+        /*Game Score- There are two scores- one for keeping track of hangman death impendence and the other for number of times user wins*/
+
+        var wins = 0;
+        var hangmanDeath = 0;
+
+        // This function is run whenever the user presses a key.
+        document.onkeyup = function (event) {
+
+            // Determines which key was pressed.
+            var userInput = event.key;
+
+
+            //start game if letter is "s"
+            if (userInput === "s") {
+
+                //Get a random word from the dictionary array
+                var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
+                console.log(currentWord);
+
+                //Create a 'dummy' blank word with the same number of characters.  
+                for (i = 0; i < currentWord.length; i++) {
+                    partialWord += "#";
+                };
+
+                console.log("Let's play.  Here's your first word: " + partialWord);
+
+                userInput = prompt("Here's your word " + partialWord + " Guess a letter");
+
+
+                console.log(userInput);
+                console.log(typeof userInput);
+                console.log(userInput === currentWord.charAt(0));
+
+                for (i = 0; i < currentWord.length; i++) {
+
+                    if (userInput === currentWord.charAt(i)) {
+
+                        //Test if the correct letter has already been used/Replaced '#'
+                        for (j = 0; j < partialWord.length; j++) {
+                            
+                            console.log("partialWord.charAt(j): " + partialWord.charAt(j)); 
+                            if (userInput === partialWord.charAt(j)) {
+                                
+                                //We want to rebuild the partialWordConstructor, but in this case, no score is added as user has chosen this letter already
+                                partialWord += userInput;
+
+                            } else {
+
+                                //User has chosen both a correct letter and an unused letter
+                                partialWord += currentWord.charAt(i);
+                                console.log("You got it!");
+                            }
+                        }
+
+
+                    } else {
+                        partialWord += "#";
+                    }
+                };
+
+                console.log(partialWord);
+            }
+        };
+
+
+    </script>
+
+</body>
+
+</html>
