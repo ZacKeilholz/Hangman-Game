@@ -20,6 +20,7 @@
         var userInput;
         var gameStarted = false;
         //Create a list of words to be chosen from randomly
+        
         var hangmanWordlist = ["and", "terrible"];
         var hangmanUsedWords = [];
         var currentWord = "";
@@ -43,11 +44,31 @@
 
         var gameOverValue = 6;
 
+        function playGame() {
+            if (gameStarted === false) {
+                //Start Game
+                wordGenerator();
+                gameStarted = true;
+            } else if (gameStarted) {
+
+                //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
+                letterGuessUsed(userInput);
+
+                //2.  If Letter has NOT been tried already, check if this letter is in the currentWord array, and replace all indices of this letter in the correct array...  If it's NOT in the currentWord Array, hangman death = + 1; 
+                if (newGuess) {
+                    newGuess = false;
+                    replaceLetter(userInput);
+                    gameStatusUpdate();
+                }
+            }
+        }
+
         function wordGenerator() {
-            currentWordArray=[];
-            wordConstructionArray=[];
-            guessedLetters=[];
-            //Get a random word from dictionary.
+            currentWordArray = [];
+            wordConstructionArray = [];
+            guessedLetters = [];
+
+            //Get a random word from dictionary. 
             var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
             console.log("Your word is: " + currentWord);
             //Turn currentWord into a blank-space partial-word array
@@ -116,29 +137,29 @@
 
             //checks if YOU LOST!
             if (hangmanDeath == gameOverValue) {
-                document.write("YOU DIED");
-                score=0;
+                console.log("You DIED!")
+                hangmanDeath = 0;
+                score = 0;
                 gameStarted = false;
-                wordGenerator();
-            };
+                playGame();
 
-            //check if YOU WON!
-            console.log("word Construction" + arrayToString(wordConstructionArray));
-            console.log("current word" + arrayToString(currentWordArray));
-            if (arrayToString(wordConstructionArray) == arrayToString(currentWordArray)) {
-                gameStarted=false;
+                //Checks if you WON!
+            } else if (arrayToString(wordConstructionArray) == arrayToString(currentWordArray)) {
+                gameStarted = false;
                 score++;
                 hangmanDeath = 0;
                 console.log("you won!");
-                wordGenerator();
-            };
+                playGame();
+            } else {
 
-            //STATUS UPDATE
-            console.log("Current Score: " + score);
-            console.log("Hangman is this close to death: " + hangmanDeath);
-            console.log("Guessed letters so far: " + arrayToString(guessedLetters));
-            console.log("Word Status: " + arrayToString(wordConstructionArray));
-
+                //STATUS UPDATE
+                console.log("Word Construction: " + arrayToString(wordConstructionArray));
+                console.log("Current word: " + arrayToString(currentWordArray));
+                console.log("Current Score: " + score);
+                console.log("Hangman is this close to death: " + hangmanDeath);
+                console.log("Guessed letters so far: " + arrayToString(guessedLetters));
+                console.log("Word Status: " + arrayToString(wordConstructionArray));
+            }
         }
 
         // This function is run whenever the user presses a key.
@@ -146,34 +167,12 @@
 
             // Determines which key was pressed.
             userInput = event.key;
-
             //press S to Start the Game
-            if ((userInput === "s") && (gameStarted === false)) {
-                //Start Game
-                wordGenerator();
-                gameStarted = true;
-            };
-
-            //Main Game Code
-            if (gameStarted) {
-
-                //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
-                letterGuessUsed(userInput);
-
-                //2.  If Letter has NOT been tried already, check if this letter is in the currentWord array, and replace all indices of this letter in the correct array...  If it's NOT in the currentWord Array, hangman death = + 1; 
-
-                if (newGuess) {
-                    newGuess = false;
-                    replaceLetter(userInput);
-                    gameStatusUpdate();
-                };
-
-                //Game win or lose Function
-                
-
-            }
+            playGame();
 
         };
+
+
 
 
 
