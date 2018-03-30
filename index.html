@@ -2,16 +2,83 @@
 <html lang="en-us">
 
 <head>
-    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <style>
+       
+    </style>
+
     <title>MNMLHNGMN</title>
 </head>
 
 <body>
 
+    <!-- Style todo list:
+        -Add background image/make it responsive
+        -add cool fonts
 
-    <div id="game">
-        <p>It's a hangman Game! Type 's' to begin. </p>
+
+    -->
+    <nav class="navbar navbar-dark bg-dark ">
+        <div class="container ">
+            <h1 class="text-xs-left text-white text-center text-uppercase mx-auto">mnmlhngmn</h1>
+        </div>
+    </nav>
+
+    <!-- Jumbotron- not sure if this is the best method -->
+    <div class="jumbotron jumbotron-fluid full-bg">
+        <div class="container game">
+            <h3 class="display-xs-2 text-center">A Minimalist Hangman Game.</h3>
+            <br>
+            <hr class="my-4">
+            <p class="lead text-center">Press any key to begin.</p>
+            
+            <!-- Scoreboard... This is empty until game starts-->
+            <div class="container scoreboard-container">
+                <div class="row">
+                    <div class="col-12" id="letters-guessed-container">
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12" id="player-score-container">
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                        <div class="col-12" id="hangman-death-container">
+    
+    
+                        </div>
+                    </div>
+
+            </div>
+            <!-- End of Scoreboard-->
+
+        </div>
     </div>
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 
     <script type="text/javascript">
 
@@ -20,8 +87,8 @@
         var userInput;
         var gameStarted = false;
         //Create a list of words to be chosen from randomly
-        
-        var hangmanWordlist = ["and", "terrible"];
+
+        var hangmanWordlist = ["and", "terrible", "blah", "turd", "munchies", "breakfast", "sandwich"];
         var hangmanUsedWords = [];
         var currentWord = "";
         var currentWordArray = [];
@@ -43,6 +110,13 @@
         var score = 0;
 
         var gameOverValue = 6;
+
+
+        //Get Div Variables
+        var targetDiv = document.getElementById("game");
+        var newPElement = document.createElement("p");
+
+
 
         function playGame() {
             if (gameStarted === false) {
@@ -70,24 +144,26 @@
 
             //Get a random word from dictionary. 
             var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
-            console.log("Your word is: " + currentWord);
             //Turn currentWord into a blank-space partial-word array
             for (var i = 0; i < currentWord.length; i++) {
                 currentWordArray.push(currentWord.charAt(i));
                 wordConstructionArray.push(blankLetter);
             }
+            console.log("Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess");
+            newPElement.textContent = "Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess";
+            game.appendChild(newPElement);
+
         }
 
 
         function letterGuessUsed(input) {
             console.log("You pressed: " + userInput);
             console.log("Guessed Letters List Length: " + guessedLetters.length);
+
             //check if input letter is already in the guessed letter array
             for (var i = 0; i < guessedLetters.length; i++) {
                 if (input == guessedLetters[i]) {
                     newGuess = false;
-                    //console.log("You guessed this letter already");
-                    //console.log("Guessed letters: " + guessedLetters[i]);
                 }
             }
             if (guessedLetters.length == 0) {
@@ -105,11 +181,12 @@
             console.log("Guessed Letters NEW List Length: " + guessedLetters.length);
         };
 
-
         function replaceLetter(input) {
+
             //Death toggle gets tripped if the userInput letter doesn't find a match in the currentWordArray.  
             var deathToggle = false;
-            //check if userInput letter is part of the current word
+
+            //Check if input letter is part of the current word
             for (var i = 0; i < currentWordArray.length; i++) {
                 if (input === currentWordArray[i]) {
                     console.log("Great job.  You got a letter");
@@ -118,11 +195,9 @@
                 }
             }
             if (!deathToggle) {
-                hangmanDeath += 1;
+                hangmanDeath++;
             }
         };
-
-
 
         function arrayToString(input) {
             var string = "";
@@ -137,6 +212,8 @@
 
             //checks if YOU LOST!
             if (hangmanDeath == gameOverValue) {
+                newPElement.textContent = "You DIED";
+                game.appendChild(newPElement);
                 console.log("You DIED!")
                 hangmanDeath = 0;
                 score = 0;
@@ -148,11 +225,15 @@
                 gameStarted = false;
                 score++;
                 hangmanDeath = 0;
+                newPElement.textContent = "You WON";
+                game.appendChild(newPElement);
                 console.log("you won!");
                 playGame();
             } else {
 
                 //STATUS UPDATE
+                newPElement.textContent = "Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess. " + " Current Score: " + score + " Hangman is this close to death " + hangmanDeath + " Guessed Letters so Far: " + arrayToString(guessedLetters);
+                game.appendChild(newPElement);
                 console.log("Word Construction: " + arrayToString(wordConstructionArray));
                 console.log("Current word: " + arrayToString(currentWordArray));
                 console.log("Current Score: " + score);
@@ -167,13 +248,8 @@
 
             // Determines which key was pressed.
             userInput = event.key;
-            //press S to Start the Game
             playGame();
-
         };
-
-
-
 
 
     </script>
