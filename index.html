@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
@@ -17,12 +19,29 @@
             background-size: cover;
             -o-background-size: cover;
         }
+
+        footer {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 50px;
+            width: 100%;
+        }
+
+        body {
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        .bg-dark {
+            background-color:black !important;
+        }
+        
     </style>
 
     <title>MNMLHNGMN</title>
 </head>
 
-<body>
+<body id="main">
 
     <!-- Style todo list:
         -Add background image/make it responsive
@@ -33,32 +52,40 @@
     -->
     <nav class="navbar navbar-dark bg-dark ">
         <div class="container col-12 col-xs-12">
-            <h2 class=" text-white text-center text-uppercase mx-auto">mnmlhngmn</h1>
+            <a class="navbar-brand text-white text-center text-uppercase mx-auto pt-3" href="index.html">
+                <h2 class="border border-white pl-1 pr-1 pb-1 pt-1">mnmlhngmn</h2>
+            </a>
         </div>
     </nav>
     <br>
     <br>
     <br>
-    <br>
-    <div class="container-fluid">
+    
+    <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-
-                <div class="jumbotron container bg-white">
+            <div class="col-xs-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 bg-white pt-5 pb-3">
+                <div class=" container">
                     <div class="row">
                         <div class="col-xs-12 col-md-10 offset-md-1 ">
 
                             <div class="row">
                                 <div class="col-12" id="main-word-container">
-                                    <h3 class="display-xs-2 text-center" id="game-title">(A Minimalist Hangman Game)</h3>
+                                    <h3 class="display-xs-2 text-center " id="game-title">(A Minimalist Hangman Game)</h3>
                                 </div>
                             </div>
+
+
+
                             <div class="row">
                                 <div class="col-12" id="press-to-begin">
-                                    <hr class="my-3">
-                                    <p class="lead text-center" id="game-instructions">Press any key to begin.</p>
+                                    <hr class="my-3" id="hr-line">
+                                    <p class="lead text-center" id="game-instructions">Type any key to begin.</p>
                                 </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-12" id="player-score-container">
+                                </div>
                             </div>
 
                             <!-- Scoreboard... This is empty until game starts-->
@@ -68,12 +95,8 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-12" id="player-score-container">
-                                </div>
-                            </div>
                             <br>
-                            
+
 
                             <div class="row">
                                 <div class="col-12" id="hangman-death-container">
@@ -86,279 +109,309 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!--Sticky Footer -->
+    <footer class="container-fluid bg-dark" id="footer-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-center pt-2 mb-1" id="footer-text">
+                    <small class="text-white">Copyright &copy2018</small>
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        //HTML Targets
+        //Main Container for injecting hidden word
+        var mainWordTarget = document.getElementById("main-word-container");
+        var mainWordContent = document.createElement("h1");
+
+        var pressToBeginTarget = document.getElementById("press-to-begin");
+
+        var guessedLettersTarget = document.getElementById("guessed-letters-container");
+        var guessedLettersContent = document.createElement("h3");
+
+
+        var playerScoreTarget = document.getElementById("player-score-container");
+        var playerScoreContent = document.createElement("h4");
+
+
+        var hangmanDeathTarget = document.getElementById("hangman-death-container");
+        var hangmanDeathContent = document.createElement("h1");
 
 
 
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
+        //HTML Replacement Vars- set these equal to whatever you want and append
 
-        <script type="text/javascript">
+        var appendHeading = document.createElement("h4");
+        var appendP = document.createElement("p");
 
-            //HTML Targets
-            //Main Container for injecting hidden word
-            var mainWordTarget = document.getElementById("main-word-container");
-            var mainWordContent = document.createElement("h1");
-
-            var pressToBeginTarget = document.getElementById("press-to-begin");
-
-            var guessedLettersTarget = document.getElementById("guessed-letters-container");
-            var guessedLettersContent = document.createElement("h3");
+        //misc html
+        var gameTitleTarget = document.getElementById("game-title");
+        var gameInstructionsTarget = document.getElementById("game-instructions");
+        var hrTarget = document.getElementById("hr-line");
 
 
-            var playerScoreTarget = document.getElementById("player-score-container");
-            var playerScoreContent = document.createElement("h4");
+        //body html 
+        var main = document.getElementById("main");
+
+        //Global Vars
+        var userInput;
+        var gameStarted = false;
+
+        //Create a list of words to be chosen from randomly
+        var hangmanWordlist = ["and", "terrible"];
+        var hangmanUsedWords = [];
+        var currentWord = "";
+        var currentWordArray = [];
+
+        var blankLetter = "#";
+        var wordConstructionArray = [];
+
+        var guessedLetters = [];
+
+        //Counters used in for loops
+        var correctLetterFound = 0;
+
+        //Store used words in a fresh array... this might be better as a local variable
+        /*Game Score- There are two scores- one for keeping track of hangman death impendence and the other for number of times user wins*/
+
+        var wins = 0;
+        var hangmanDeath = 0;
+        var score = 0;
+
+        var gameOverValue = 8;
+
+        function hangmanScore() {
+            var hangmanBodyConstruction = "";
+            switch (hangmanDeath) {
+                case (0):
+                    break;
+                case (1):
+                    hangmanBodyConstruction = "0";
+                    break;
+                case (2):
+                    hangmanBodyConstruction = "0-";
+                    break;
+                case (3):
+                    hangmanBodyConstruction = "0-<";
+                    break;
+                case (4):
+                    hangmanBodyConstruction = "0-<-";
+                    break;
+                case (5):
+                    hangmanBodyConstruction = "0-<--";
+                    break;
+                case (6):
+                    hangmanBodyConstruction = "0-<--<";
+                    break;
+
+                default:
+                    hangmanBodyConstruction = "";
+            }
+
+            //Hangman Death Drawing HTML
+            hangmanDeathContent.textContent = hangmanBodyConstruction;
+            hangmanDeathContent.classList.add("text-center");
+            hangmanDeathContent.classList.add("text-danger");
+            if (hangmanDeath > 0) {
+                hangmanDeathContent.classList.add("border-dark");
+                hangmanDeathContent.classList.add("border");
+            } else {
+                hangmanDeathContent.classList.remove("border-dark");
+                hangmanDeathContent.classList.remove("border-dark");
+            }
+            if (hangmanDeath > 6) {
+                hangmanDeathContent.classList.add("border");
+
+            }
+
+            hangmanDeathContent.classList.add("font-weight-bold");
 
 
-            var hangmanDeathTarget = document.getElementById("hangman-death-container");
-            var hangmanDeathContent = document.createElement("h1");
+
+            hangmanDeathTarget.appendChild(hangmanDeathContent);
+        }
+
+
+        function playGame() {
+            if (gameStarted === false) {
+                //Start Game
+                gameTitleTarget.style.display = "none";
+                gameInstructionsTarget.style.display = "none";
+                //hrTarget.style.display = "none";
 
 
 
-            //HTML Replacement Vars- set these equal to whatever you want and append
+                wordGenerator();
+                gameStarted = true;
+            } else if (gameStarted) {
 
-            var appendHeading = document.createElement("h4");
-            var appendP = document.createElement("p");
+                //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
+                letterGuessUsed(userInput);
 
-            //misc html
-            var gameTitleTarget = document.getElementById("game-title");
-            var gameInstructionsTarget = document.getElementById("game-instructions");
-
-            //Global Vars
-            var userInput;
-            var gameStarted = false;
-
-            //Create a list of words to be chosen from randomly
-            var hangmanWordlist = ["and", "terrible"];
-            var hangmanUsedWords = [];
-            var currentWord = "";
-            var currentWordArray = [];
-
-            var blankLetter = "#";
-            var wordConstructionArray = [];
-
-            var guessedLetters = [];
-
-            //Counters used in for loops
-            var correctLetterFound = 0;
-
-            //Store used words in a fresh array... this might be better as a local variable
-            /*Game Score- There are two scores- one for keeping track of hangman death impendence and the other for number of times user wins*/
-
-            var wins = 0;
-            var hangmanDeath = 0;
-            var score = 0;
-
-            var gameOverValue = 8;
-
-            function hangmanScore() {
-                var hangmanBodyConstruction = "";
-                switch (hangmanDeath) {
-                    case (0):
-                        break;
-                    case (1):
-                        hangmanBodyConstruction = "0";
-                        break;
-                    case (2):
-                        hangmanBodyConstruction = "0-";
-                        break;
-                    case (3):
-                        hangmanBodyConstruction = "0-/";
-                        break;
-                    case (4):
-                        hangmanBodyConstruction = "0-//";
-                        break;
-                    case (5):
-                        hangmanBodyConstruction = "0-//<";
-                        break;
-                    case (6):
-                        hangmanBodyConstruction = "0-//</";
-                        break;
-                    case (7):
-                        hangmanBodyConstruction = "0-//<//";
-                        break;
-                    default:
-                        hangmanBodyConstruction = "0-//<//";
+                //2.  If Letter has NOT been tried already, check if this letter is in the currentWord array, and replace all indices of this letter in the correct array...  If it's NOT in the currentWord Array, hangman death = + 1; 
+                if (newGuess) {
+                    newGuess = false;
+                    replaceLetter(userInput);
+                    gameStatusUpdate();
                 }
+            }
+        }
 
-                //Hangman Death Drawing HTML
-                hangmanDeathContent.textContent = hangmanBodyConstruction;
-                hangmanDeathContent.classList.add("text-center");
-                hangmanDeathContent.classList.add("text-danger");
-                hangmanDeathContent.classList.add("bg-dark");
+        function wordGenerator() {
+            currentWordArray = [];
+            wordConstructionArray = [];
+            guessedLetters = [];
 
-
-
-                hangmanDeathTarget.appendChild(hangmanDeathContent);
+            //Get a random word from dictionary. 
+            var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
+            //Turn currentWord into a blank-space partial-word array
+            for (var i = 0; i < currentWord.length; i++) {
+                currentWordArray.push(currentWord.charAt(i));
+                wordConstructionArray.push(blankLetter);
             }
 
 
-            function playGame() {
-                if (gameStarted === false) {
-                    //Start Game
-                    gameTitleTarget.style.display="none";
-                    gameInstructionsTarget.style.display="none";
+            console.log("Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess");
+            //appendHeading.textContent = "Yr wrd: " + arrayToString(wordConstructionArray) + "br"+" Typ lttr 2 gss";
+            mainWordContent.textContent = arrayToString(wordConstructionArray);
+            mainWordContent.classList.add("text-center")
+            mainWordTarget.appendChild(mainWordContent);
+
+        }
 
 
-                    wordGenerator();
-                    gameStarted = true;
-                } else if (gameStarted) {
+        function letterGuessUsed(input) {
+            console.log("You pressed: " + userInput);
+            console.log("Guessed Letters List Length: " + guessedLetters.length);
 
-                    //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
-                    letterGuessUsed(userInput);
-
-                    //2.  If Letter has NOT been tried already, check if this letter is in the currentWord array, and replace all indices of this letter in the correct array...  If it's NOT in the currentWord Array, hangman death = + 1; 
-                    if (newGuess) {
-                        newGuess = false;
-                        replaceLetter(userInput);
-                        gameStatusUpdate();
-                    }
+            //check if input letter is already in the guessed letter array
+            for (var i = 0; i < guessedLetters.length; i++) {
+                if (input == guessedLetters[i]) {
+                    newGuess = false;
                 }
             }
+            if (guessedLetters.length == 0) {
+                guessedLetters.push(input);
+                newGuess = true;
+            } else {
+                guessedLetters.push(input);
+                newGuess = true;
+            }
 
-            function wordGenerator() {
-                currentWordArray = [];
-                wordConstructionArray = [];
-                guessedLetters = [];
+            if (!newGuess) {
+                console.log("You guessed this letter already!  Try again.");
 
-                //Get a random word from dictionary. 
-                var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
-                //Turn currentWord into a blank-space partial-word array
-                for (var i = 0; i < currentWord.length; i++) {
-                    currentWordArray.push(currentWord.charAt(i));
-                    wordConstructionArray.push(blankLetter);
+            }
+            console.log("Guessed Letters NEW List Length: " + guessedLetters.length);
+        };
+
+        function replaceLetter(input) {
+
+            //Death toggle gets tripped if the userInput letter doesn't find a match in the currentWordArray.  
+            var deathToggle = false;
+
+            //Check if input letter is part of the current word
+            for (var i = 0; i < currentWordArray.length; i++) {
+                if (input === currentWordArray[i]) {
+                    console.log("Great job.  You got a letter");
+                    wordConstructionArray[i] = input;
+                    deathToggle = true;
                 }
+            }
+            if (!deathToggle) {
+                hangmanDeath++;
+            }
+        };
+
+        function arrayToString(input) {
+            var string = "";
+            for (var i = 0; i < input.length; i++) {
+                string += input[i];
+            }
+            return string;
+        }
 
 
-                console.log("Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess");
-                //appendHeading.textContent = "Yr wrd: " + arrayToString(wordConstructionArray) + "br"+" Typ lttr 2 gss";
+        function gameStatusUpdate() {
+
+            //checks if YOU LOST!
+            if (hangmanDeath == gameOverValue) {
+                //newPElement.textContent = "You DIED";
+                // game.appendChild(newPElement);
+                console.log("You DIED!")
+                hangmanDeath = 0;
+                score = 0;
+                document.body.style.backgroundImage = "url('https://tccandlesandmore.com/wp-content/uploads/2017/01/zen-space.jpg')"
+                gameStarted = false;
+                playGame();
+
+                //Checks if you WON!
+            } else if (arrayToString(wordConstructionArray) == arrayToString(currentWordArray)) {
+                gameStarted = false;
+                score++;
+                hangmanDeath = 0;
+                //newPElement.textContent = "You WON";
+                //game.appendChild(newPElement);
+                console.log("you won!");
+                document.body.style.backgroundImage = "url('')";
+                playGame();
+            } else {
+
+                //STATUS UPDATE
+                //newPElement.textContent = "Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess. " + " Current Score: " + score + " Hangman is this close to death " + hangmanDeath + " Guessed Letters so Far: " + arrayToString(guessedLetters);
+                //game.appendChild(newPElement);
+                console.log("Word Construction: " + arrayToString(wordConstructionArray));
+                console.log("Current word: " + arrayToString(currentWordArray));
+                console.log("Current Score: " + score);
+                console.log("Hangman is this close to death: " + hangmanDeath);
+
+                //Guessed Letters HTML :
+                console.log("Guessed letters so far: " + arrayToString(guessedLetters));
+                guessedLettersContent.textContent = "Gsd Ltrs: " + arrayToString(guessedLetters);
+                guessedLettersContent.classList.add("text-center")
+                guessedLettersTarget.appendChild(guessedLettersContent);
+
+                //Partial Word HTML :
+                console.log("Word Status: " + arrayToString(wordConstructionArray));
                 mainWordContent.textContent = arrayToString(wordConstructionArray);
                 mainWordContent.classList.add("text-center")
                 mainWordTarget.appendChild(mainWordContent);
 
+                //Player Score HTML
+                playerScoreContent.textContent = "Yr Scr: " + score;
+                playerScoreContent.classList.add("text-center")
+                playerScoreTarget.appendChild(playerScoreContent);
+
+                //Hangman HTML 
+                hangmanScore();
             }
+        }
+
+        // This function is run whenever the user presses a key.
+        document.onkeyup = function (event) {
+
+            // Determines which key was pressed.
+            userInput = event.key;
+            playGame();
+        };
 
 
-            function letterGuessUsed(input) {
-                console.log("You pressed: " + userInput);
-                console.log("Guessed Letters List Length: " + guessedLetters.length);
-
-                //check if input letter is already in the guessed letter array
-                for (var i = 0; i < guessedLetters.length; i++) {
-                    if (input == guessedLetters[i]) {
-                        newGuess = false;
-                    }
-                }
-                if (guessedLetters.length == 0) {
-                    guessedLetters.push(input);
-                    newGuess = true;
-                } else {
-                    guessedLetters.push(input);
-                    newGuess = true;
-                }
-
-                if (!newGuess) {
-                    console.log("You guessed this letter already!  Try again.");
-
-                }
-                console.log("Guessed Letters NEW List Length: " + guessedLetters.length);
-            };
-
-            function replaceLetter(input) {
-
-                //Death toggle gets tripped if the userInput letter doesn't find a match in the currentWordArray.  
-                var deathToggle = false;
-
-                //Check if input letter is part of the current word
-                for (var i = 0; i < currentWordArray.length; i++) {
-                    if (input === currentWordArray[i]) {
-                        console.log("Great job.  You got a letter");
-                        wordConstructionArray[i] = input;
-                        deathToggle = true;
-                    }
-                }
-                if (!deathToggle) {
-                    hangmanDeath++;
-                }
-            };
-
-            function arrayToString(input) {
-                var string = "";
-                for (var i = 0; i < input.length; i++) {
-                    string += input[i];
-                }
-                return string;
-            }
-
-
-            function gameStatusUpdate() {
-
-                //checks if YOU LOST!
-                if (hangmanDeath == gameOverValue) {
-                    //newPElement.textContent = "You DIED";
-                    // game.appendChild(newPElement);
-                    console.log("You DIED!")
-                    hangmanDeath = 0;
-                    score = 0;
-                    gameStarted = false;
-                    playGame();
-
-                    //Checks if you WON!
-                } else if (arrayToString(wordConstructionArray) == arrayToString(currentWordArray)) {
-                    gameStarted = false;
-                    score++;
-                    hangmanDeath = 0;
-                    //newPElement.textContent = "You WON";
-                    //game.appendChild(newPElement);
-                    console.log("you won!");
-                    playGame();
-                } else {
-
-                    //STATUS UPDATE
-                    //newPElement.textContent = "Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess. " + " Current Score: " + score + " Hangman is this close to death " + hangmanDeath + " Guessed Letters so Far: " + arrayToString(guessedLetters);
-                    //game.appendChild(newPElement);
-                    console.log("Word Construction: " + arrayToString(wordConstructionArray));
-                    console.log("Current word: " + arrayToString(currentWordArray));
-                    console.log("Current Score: " + score);
-                    console.log("Hangman is this close to death: " + hangmanDeath);
-
-                    //Guessed Letters HTML :
-                    console.log("Guessed letters so far: " + arrayToString(guessedLetters));
-                    guessedLettersContent.textContent = arrayToString(guessedLetters);
-                    guessedLettersContent.classList.add("text-center")
-                    guessedLettersTarget.appendChild(guessedLettersContent);
-
-                    //Partial Word HTML :
-                    console.log("Word Status: " + arrayToString(wordConstructionArray));
-                    mainWordContent.textContent = arrayToString(wordConstructionArray);
-                    mainWordContent.classList.add("text-center")
-                    mainWordTarget.appendChild(mainWordContent);
-
-                    //Player Score HTML
-                    playerScoreContent.textContent = "SCR: " + score;
-                    playerScoreContent.classList.add("text-center")
-                    playerScoreTarget.appendChild(playerScoreContent);
-
-                    //Hangman HTML 
-                    hangmanScore();
-                }
-            }
-
-            // This function is run whenever the user presses a key.
-            document.onkeyup = function (event) {
-
-                // Determines which key was pressed.
-                userInput = event.key;
-                playGame();
-            };
-
-
-        </script>
+    </script>
 
 </body>
 
