@@ -2,15 +2,14 @@
 <html lang="en-us">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://meyerweb.com/eric/tools/css/reset/reset.css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
+
     <style>
         body {
             background: url('') no-repeat center center fixed;
@@ -40,13 +39,8 @@
     <title>MNMLHNGMN</title>
 </head>
 
-<body id="main">
-
-
-    <!-- Style todo list:
-        -Add background image/make it responsive
-        -organize div containers etc.
-    -->
+<body>
+    <!--Navigation-->
     <nav class="navbar navbar-dark bg-dark ">
         <div class="container col-12 col-xs-12">
             <a class="navbar-brand text-white text-center text-uppercase mx-auto pt-3" href="index.html">
@@ -58,6 +52,7 @@
     <br>
     <br>
 
+    <!--Content-->
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 bg-white pt-5 pb-3">
@@ -65,14 +60,14 @@
                     <div class="row">
                         <div class="col-xs-12 col-md-10 offset-md-1 ">
 
+                            <!--Main Game Explanation/Random Word Location-->
                             <div class="row">
                                 <div class="col-12" id="main-word-container">
                                     <h3 class="display-xs-2 text-center " id="game-title">A Minimalist Hangman Game For Masochists</h3>
                                 </div>
                             </div>
 
-
-
+                            <!--Game instructions- These are 'hidden' at game start-->
                             <div class="row">
                                 <div class="col-12" id="press-to-begin">
                                     <hr class="my-3" id="hr-line">
@@ -80,21 +75,23 @@
                                 </div>
                             </div>
 
+                            <!--Player Score-->
                             <div class="row">
                                 <div class="col-12" id="player-score-container">
                                 </div>
                             </div>
 
-                            <!-- Scoreboard... This is empty until game starts-->
+                            <!-- Guessed Letters-->
                             <div class="row">
                                 <div class="col-12" id="guessed-letters-container">
                                     <h2></h2>
                                 </div>
                             </div>
-
+                            
                             <br>
-
-
+                            
+                            
+                            <!-- Hangman 'doodle' container-->
                             <div class="row">
                                 <div class="col-12" id="hangman-death-container">
                                 </div>
@@ -120,296 +117,17 @@
 
     </footer>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!--Bootstrap JS and Jquery -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    
+    <!-- Link to my JS-->
+    <script src="assets/game.js"></script>
 
-    <script type="text/javascript">
-        //Current Bugs/improvements that need to happen: 
-        //1.Show guessed letters, score, and ----- immediately after pressing first letter
-        //2. Add icons to score and guessed letters
-        //3. Fix duplicate letter guess
-        //4. Filter letter input to only allow letters.
-        //5. random image texture background
-        //6. Break the code into assets/css/scripts per assignment
-        //7
-        //Last things:  1. Add a readme.md to repository describing project,2 . add the project to portfolio page.  3. add link in the homework submission in bootcampspot.  
-
-
-        //HTML Targets
-        //Main Container for injecting hidden word
-        var mainWordTarget = document.getElementById("main-word-container");
-        var mainWordContent = document.createElement("h1");
-
-        var pressToBeginTarget = document.getElementById("press-to-begin");
-
-        var guessedLettersTarget = document.getElementById("guessed-letters-container");
-        var guessedLettersContent = document.createElement("h3");
-
-
-        var playerScoreTarget = document.getElementById("player-score-container");
-        var playerScoreContent = document.createElement("h4");
-
-
-        var hangmanDeathTarget = document.getElementById("hangman-death-container");
-        var hangmanDeathContent = document.createElement("h1");
-
-
-
-        //HTML Replacement Vars- set these equal to whatever you want and append
-
-        var appendHeading = document.createElement("h4");
-        var appendP = document.createElement("p");
-
-        //misc html
-        var gameTitleTarget = document.getElementById("game-title");
-        var gameInstructionsTarget = document.getElementById("game-instructions");
-        var hrTarget = document.getElementById("hr-line");
-
-
-        //body html 
-        var main = document.getElementById("main");
-
-        //Global Vars
-        var userInput;
-        var gameStarted = false;
-
-        //Create a list of words to be chosen from randomly
-        var hangmanWordlist = ["and", "terrible", "copper", "explain", "truck", "neat", "unite", "branch", "educated", "tenuous", "hum", "decisive", "notice", "camera", "glass", "nutty", "bent", "receive"];
-        var hangmanUsedWords = [];
-        var currentWord = "";
-        var currentWordArray = [];
-
-        var blankLetter = "#";
-        var wordConstructionArray = [];
-
-        var guessedLetters = [];
-
-        //Counters used in for loops
-        var correctLetterFound = 0;
-
-        //Store used words in a fresh array... this might be better as a local variable
-        /*Game Score- There are two scores- one for keeping track of hangman death impendence and the other for number of times user wins*/
-
-        var wins = 0;
-        var hangmanDeath = 0;
-        var score = 0;
-
-        var gameOverValue = 10;
-
-        var newGuess = true;
-
-        // This function is run whenever the user presses a key.
-        document.onkeyup = function (event) {
-
-            // Determines which key was pressed.
-            userInput = event.key;
-            playGame();
-        };
-
-
-        function updateHTML() {
-            //Guessed Letters HTML :
-            guessedLettersContent.textContent = "Gsd Ltrs: " + arrayToString(guessedLetters);
-            guessedLettersContent.classList.add("text-center")
-            guessedLettersTarget.appendChild(guessedLettersContent);
-
-            //Partial Word HTML :
-            mainWordContent.textContent = arrayToString(wordConstructionArray);
-            mainWordContent.classList.add("text-center")
-            mainWordTarget.appendChild(mainWordContent);
-
-            //Player Score HTML
-            playerScoreContent.textContent = "Yr Scr: " + score;
-            playerScoreContent.classList.add("text-center")
-            playerScoreTarget.appendChild(playerScoreContent);
-
-            var hangmanBodyConstruction = "";
-            switch (hangmanDeath) {
-                case (0):
-                    hangmanBodyConstruction = "----------";
-                    break;
-                case (1):
-                    hangmanBodyConstruction = "X---------";
-                    break;
-                case (2):
-                    hangmanBodyConstruction = "XX--------";
-                    break;
-                case (3):
-                    hangmanBodyConstruction = "XXX-------";
-                    break;
-                case (4):
-                    hangmanBodyConstruction = "XXXX------";
-                    break;
-                case (5):
-                    hangmanBodyConstruction = "XXXXX-----";
-                    break;
-                case (6):
-                    hangmanBodyConstruction = "XXXXXX----";
-                    break;
-                case (7):
-                    hangmanBodyConstruction = "XXXXXXX---";
-                    break;
-                    case (8):
-                    hangmanBodyConstruction = "XXXXXXXX--";
-                    break;
-                    case (9):
-                    hangmanBodyConstruction = "XXXXXXXXX-";
-                    break;
-                    case (10):
-                    hangmanBodyConstruction = "XXXXXXXXXX";
-                    break;
-
-                default:
-                    hangmanBodyConstruction = "----------";
-            }
-
-            //Hangman HTML Drawing
-            hangmanDeathContent.textContent = hangmanBodyConstruction;
-            hangmanDeathContent.classList.add("text-center");
-            hangmanDeathContent.classList.add("text-danger");
-            hangmanDeathContent.classList.add("font-weight-bold");
-            hangmanDeathTarget.appendChild(hangmanDeathContent);
-        }
-
-
-        //Start Game
-        function playGame() {
-
-            //Add Score and Guessed letters to HTML 
-            updateHTML();
-
-            //Initial Game Startup Sequence- This does everything up to the user choosing their first letter
-            if (gameStarted === false) {
-                gameTitleTarget.style.display = "none";
-                gameInstructionsTarget.style.display = "none";
-                wordGenerator();
-                gameStarted = true;
-            } else if (gameStarted) {
-
-                //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
-                letterGuessUsed(userInput);
-            }
-        }
-
-        function wordGenerator() {
-            currentWordArray = [];
-            wordConstructionArray = [];
-            guessedLetters = [];
-
-            //Get a random word from dictionary. 
-            var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
-
-            //Remove vowels from word for extra torture
-
-            var vowel = ["a", "e", "i", "o", "u"];
-            var vowelsRemoved = currentWord;
-            for (var i = 0; i < vowel.length; i++) {
-                var stringLength = vowelsRemoved.length;
-                for (j = 0; j < stringLength; j++) {
-                    if (vowel[i] == vowelsRemoved.charAt(j)) {
-                        vowelsRemoved = vowelsRemoved.slice(0, j).concat(vowelsRemoved.slice(j + 1, stringLength));
-                    }
-                }
-            }
-            console.log("Here's the word, because you're a total cheater...Original word was: "+currentWord+" and the vowel-removed word is: "+vowelsRemoved);
-            //Turn currentWord into a blank-space partial-word array
-            for (var i = 0; i < vowelsRemoved.length; i++) {
-                currentWordArray.push(vowelsRemoved.charAt(i));
-                wordConstructionArray.push(blankLetter);
-            }
-
-            mainWordContent.textContent = arrayToString(wordConstructionArray);
-            mainWordContent.classList.add("text-center")
-            mainWordTarget.appendChild(mainWordContent);
-
-        }
-
-
-        //Checks if input letter is already in the guessed letter array for scoring purposes
-        function letterGuessUsed(input) {
-            var newGuess = true;
-
-            for (var i = 0; i < guessedLetters.length; i++) {
-                if (input == guessedLetters[i]) {
-                    newGuess = false;
-                }
-            }
-            if (newGuess) {
-                guessedLetters.push(input);
-                console.log("e");
-            } else if (guessedLetters.length === 0) {
-                newGuess = true;
-                guessedLetters.push(input);
-                console.log("b");
-            } else {
-                newGuess = true;
-            }
-
-            replaceLetter(userInput);
-            gameScoreUpdate();
-        }
-
-
-        //Death toggle gets tripped if the userInput letter doesn't find a match in the currentWordArray.   
-        function replaceLetter(input) {
-
-            var deathToggle = false;
-
-            //Check if input letter is part of the current word
-            for (var i = 0; i < currentWordArray.length; i++) {
-                if (input === currentWordArray[i]) {
-                    wordConstructionArray[i] = input;
-                    deathToggle = true;
-                }
-            }
-            if (!deathToggle) {
-                hangmanDeath++;
-            }
-        };
-
-        function arrayToString(input) {
-            var string = "";
-            for (var i = 0; i < input.length; i++) {
-                string += input[i];
-            }
-            return string;
-        }
-
-
-        function gameScoreUpdate() {
-            //checks if YOU LOST!
-            if (hangmanDeath == gameOverValue) {
-                hangmanDeath = 0;
-                score = 0;
-                guessedLetters = [];
-                document.body.style.backgroundImage = "url('https://images.pexels.com/photos/1749/fire-orange-emergency-burning.jpg?auto=compress&cs=tinysrgb&h=750&w=1260')"
-                gameStarted = false;
-                playGame();
-
-                //Checks if you WON!
-            } else if (arrayToString(wordConstructionArray) == arrayToString(currentWordArray)) {
-                hangmanDeath = 0;
-                gameStarted = false;
-                guessedLetters = [];
-                score++;
-                document.body.style.backgroundImage = "url('')";
-                playGame();
-
-            } else {
-                //STATUS UPDATE
-                updateHTML();
-            }
-        }
-
-
-
-    </script>
 </body>
 
 </html>
