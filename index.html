@@ -180,7 +180,7 @@
         var gameStarted = false;
 
         //Create a list of words to be chosen from randomly
-        var hangmanWordlist = ["and", "terrible"];
+        var hangmanWordlist = ["and", "terrible", "copper", "explain", "truck", "neat", "unite", "branch", "educated", "tenuous", "hum", "decisive", "notice", "camera", "glass", "nutty", "bent", "receive"];
         var hangmanUsedWords = [];
         var currentWord = "";
         var currentWordArray = [];
@@ -200,7 +200,7 @@
         var hangmanDeath = 0;
         var score = 0;
 
-        var gameOverValue = 7;
+        var gameOverValue = 10;
 
         var newGuess = true;
 
@@ -232,29 +232,41 @@
             var hangmanBodyConstruction = "";
             switch (hangmanDeath) {
                 case (0):
-                    hangmanBodyConstruction = "------";
+                    hangmanBodyConstruction = "----------";
                     break;
                 case (1):
-                    hangmanBodyConstruction = "X-----";
+                    hangmanBodyConstruction = "X---------";
                     break;
                 case (2):
-                    hangmanBodyConstruction = "XX----";
+                    hangmanBodyConstruction = "XX--------";
                     break;
                 case (3):
-                    hangmanBodyConstruction = "XXX---";
+                    hangmanBodyConstruction = "XXX-------";
                     break;
                 case (4):
-                    hangmanBodyConstruction = "XXXX--";
+                    hangmanBodyConstruction = "XXXX------";
                     break;
                 case (5):
-                    hangmanBodyConstruction = "XXXXX-";
+                    hangmanBodyConstruction = "XXXXX-----";
                     break;
                 case (6):
-                    hangmanBodyConstruction = "XXXXXX";
+                    hangmanBodyConstruction = "XXXXXX----";
+                    break;
+                case (7):
+                    hangmanBodyConstruction = "XXXXXXX---";
+                    break;
+                    case (8):
+                    hangmanBodyConstruction = "XXXXXXXX--";
+                    break;
+                    case (9):
+                    hangmanBodyConstruction = "XXXXXXXXX-";
+                    break;
+                    case (10):
+                    hangmanBodyConstruction = "XXXXXXXXXX";
                     break;
 
                 default:
-                    hangmanBodyConstruction = "------";
+                    hangmanBodyConstruction = "----------";
             }
 
             //Hangman HTML Drawing
@@ -292,10 +304,23 @@
 
             //Get a random word from dictionary. 
             var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
-            
+
+            //Remove vowels from word for extra torture
+
+            var vowel = ["a", "e", "i", "o", "u"];
+            var vowelsRemoved = currentWord;
+            for (var i = 0; i < vowel.length; i++) {
+                var stringLength = vowelsRemoved.length;
+                for (j = 0; j < stringLength; j++) {
+                    if (vowel[i] == vowelsRemoved.charAt(j)) {
+                        vowelsRemoved = vowelsRemoved.slice(0, j).concat(vowelsRemoved.slice(j + 1, stringLength));
+                    }
+                }
+            }
+            console.log("Here's the word, because you're a total cheater...Original word was: "+currentWord+" and the vowel-removed word is: "+vowelsRemoved);
             //Turn currentWord into a blank-space partial-word array
-            for (var i = 0; i < currentWord.length; i++) {
-                currentWordArray.push(currentWord.charAt(i));
+            for (var i = 0; i < vowelsRemoved.length; i++) {
+                currentWordArray.push(vowelsRemoved.charAt(i));
                 wordConstructionArray.push(blankLetter);
             }
 
@@ -309,6 +334,7 @@
         //Checks if input letter is already in the guessed letter array for scoring purposes
         function letterGuessUsed(input) {
             var newGuess = true;
+
             for (var i = 0; i < guessedLetters.length; i++) {
                 if (input == guessedLetters[i]) {
                     newGuess = false;
@@ -338,7 +364,6 @@
             //Check if input letter is part of the current word
             for (var i = 0; i < currentWordArray.length; i++) {
                 if (input === currentWordArray[i]) {
-                    console.log("Great job.  You got a letter");
                     wordConstructionArray[i] = input;
                     deathToggle = true;
                 }
@@ -363,7 +388,7 @@
                 hangmanDeath = 0;
                 score = 0;
                 guessedLetters = [];
-                document.body.style.backgroundImage = "url('https://tccandlesandmore.com/wp-content/uploads/2017/01/zen-space.jpg')"
+                document.body.style.backgroundImage = "url('https://images.pexels.com/photos/1749/fire-orange-emergency-burning.jpg?auto=compress&cs=tinysrgb&h=750&w=1260')"
                 gameStarted = false;
                 playGame();
 
@@ -373,7 +398,6 @@
                 gameStarted = false;
                 guessedLetters = [];
                 score++;
-                console.log("you won!");
                 document.body.style.backgroundImage = "url('')";
                 playGame();
 
