@@ -13,7 +13,7 @@
         crossorigin="anonymous">
     <style>
         body {
-            background: url('https://tccandlesandmore.com/wp-content/uploads/2017/01/zen-space.jpg') no-repeat center center fixed;
+            background: url('') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             background-size: cover;
@@ -21,7 +21,7 @@
         }
 
         footer {
-            position: absolute;
+            position: fixed;
             left: 0;
             bottom: 0;
             height: 50px;
@@ -33,9 +33,8 @@
         }
 
         .bg-dark {
-            background-color:black !important;
+            background-color: black !important;
         }
-        
     </style>
 
     <title>MNMLHNGMN</title>
@@ -43,12 +42,10 @@
 
 <body id="main">
 
+
     <!-- Style todo list:
         -Add background image/make it responsive
-        -add cool fonts
         -organize div containers etc.
-        -hangman that is normally in-line but stacks on small screen:  0-\\<\\ Dead = strikethrough in red.
-
     -->
     <nav class="navbar navbar-dark bg-dark ">
         <div class="container col-12 col-xs-12">
@@ -60,7 +57,7 @@
     <br>
     <br>
     <br>
-    
+
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 bg-white pt-5 pb-3">
@@ -70,7 +67,7 @@
 
                             <div class="row">
                                 <div class="col-12" id="main-word-container">
-                                    <h3 class="display-xs-2 text-center " id="game-title">(A Minimalist Hangman Game)</h3>
+                                    <h3 class="display-xs-2 text-center " id="game-title">A Minimalist Hangman Game For Masochists</h3>
                                 </div>
                             </div>
 
@@ -133,6 +130,16 @@
         crossorigin="anonymous"></script>
 
     <script type="text/javascript">
+        //Current Bugs/improvements that need to happen: 
+        //1.Show guessed letters, score, and ----- immediately after pressing first letter
+        //2. Add icons to score and guessed letters
+        //3. Fix duplicate letter guess
+        //4. Filter letter input to only allow letters.
+        //5. random image texture background
+        //6. Break the code into assets/css/scripts per assignment
+        //7
+        //Last things:  1. Add a readme.md to repository describing project,2 . add the project to portfolio page.  3. add link in the homework submission in bootcampspot.  
+
 
         //HTML Targets
         //Main Container for injecting hidden word
@@ -193,82 +200,88 @@
         var hangmanDeath = 0;
         var score = 0;
 
-        var gameOverValue = 8;
+        var gameOverValue = 7;
 
-        function hangmanScore() {
+        var newGuess = true;
+
+        // This function is run whenever the user presses a key.
+        document.onkeyup = function (event) {
+
+            // Determines which key was pressed.
+            userInput = event.key;
+            playGame();
+        };
+
+
+        function updateHTML() {
+            //Guessed Letters HTML :
+            guessedLettersContent.textContent = "Gsd Ltrs: " + arrayToString(guessedLetters);
+            guessedLettersContent.classList.add("text-center")
+            guessedLettersTarget.appendChild(guessedLettersContent);
+
+            //Partial Word HTML :
+            mainWordContent.textContent = arrayToString(wordConstructionArray);
+            mainWordContent.classList.add("text-center")
+            mainWordTarget.appendChild(mainWordContent);
+
+            //Player Score HTML
+            playerScoreContent.textContent = "Yr Scr: " + score;
+            playerScoreContent.classList.add("text-center")
+            playerScoreTarget.appendChild(playerScoreContent);
+
             var hangmanBodyConstruction = "";
             switch (hangmanDeath) {
                 case (0):
+                    hangmanBodyConstruction = "------";
                     break;
                 case (1):
-                    hangmanBodyConstruction = "0";
+                    hangmanBodyConstruction = "X-----";
                     break;
                 case (2):
-                    hangmanBodyConstruction = "0-";
+                    hangmanBodyConstruction = "XX----";
                     break;
                 case (3):
-                    hangmanBodyConstruction = "0-<";
+                    hangmanBodyConstruction = "XXX---";
                     break;
                 case (4):
-                    hangmanBodyConstruction = "0-<-";
+                    hangmanBodyConstruction = "XXXX--";
                     break;
                 case (5):
-                    hangmanBodyConstruction = "0-<--";
+                    hangmanBodyConstruction = "XXXXX-";
                     break;
                 case (6):
-                    hangmanBodyConstruction = "0-<--<";
+                    hangmanBodyConstruction = "XXXXXX";
                     break;
 
                 default:
-                    hangmanBodyConstruction = "";
+                    hangmanBodyConstruction = "------";
             }
 
-            //Hangman Death Drawing HTML
+            //Hangman HTML Drawing
             hangmanDeathContent.textContent = hangmanBodyConstruction;
             hangmanDeathContent.classList.add("text-center");
             hangmanDeathContent.classList.add("text-danger");
-            if (hangmanDeath > 0) {
-                hangmanDeathContent.classList.add("border-dark");
-                hangmanDeathContent.classList.add("border");
-            } else {
-                hangmanDeathContent.classList.remove("border-dark");
-                hangmanDeathContent.classList.remove("border-dark");
-            }
-            if (hangmanDeath > 6) {
-                hangmanDeathContent.classList.add("border");
-
-            }
-
             hangmanDeathContent.classList.add("font-weight-bold");
-
-
-
             hangmanDeathTarget.appendChild(hangmanDeathContent);
         }
 
 
+        //Start Game
         function playGame() {
+
+            //Add Score and Guessed letters to HTML 
+            updateHTML();
+
+            //Initial Game Startup Sequence- This does everything up to the user choosing their first letter
             if (gameStarted === false) {
-                //Start Game
                 gameTitleTarget.style.display = "none";
                 gameInstructionsTarget.style.display = "none";
-                //hrTarget.style.display = "none";
-
-
-
                 wordGenerator();
                 gameStarted = true;
             } else if (gameStarted) {
 
                 //1.  Check if letter has been pressed already.  If it hasn't, add it to the checked letter list and if it HAS already been guessed, tell the user... Also, toggle a boolean for next phase.
                 letterGuessUsed(userInput);
-
-                //2.  If Letter has NOT been tried already, check if this letter is in the currentWord array, and replace all indices of this letter in the correct array...  If it's NOT in the currentWord Array, hangman death = + 1; 
-                if (newGuess) {
-                    newGuess = false;
-                    replaceLetter(userInput);
-                    gameStatusUpdate();
-                }
             }
         }
 
@@ -279,15 +292,13 @@
 
             //Get a random word from dictionary. 
             var currentWord = hangmanWordlist[Math.floor(Math.random() * hangmanWordlist.length)];
+            
             //Turn currentWord into a blank-space partial-word array
             for (var i = 0; i < currentWord.length; i++) {
                 currentWordArray.push(currentWord.charAt(i));
                 wordConstructionArray.push(blankLetter);
             }
 
-
-            console.log("Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess");
-            //appendHeading.textContent = "Yr wrd: " + arrayToString(wordConstructionArray) + "br"+" Typ lttr 2 gss";
             mainWordContent.textContent = arrayToString(wordConstructionArray);
             mainWordContent.classList.add("text-center")
             mainWordTarget.appendChild(mainWordContent);
@@ -295,34 +306,33 @@
         }
 
 
+        //Checks if input letter is already in the guessed letter array for scoring purposes
         function letterGuessUsed(input) {
-            console.log("You pressed: " + userInput);
-            console.log("Guessed Letters List Length: " + guessedLetters.length);
-
-            //check if input letter is already in the guessed letter array
+            var newGuess = true;
             for (var i = 0; i < guessedLetters.length; i++) {
                 if (input == guessedLetters[i]) {
                     newGuess = false;
                 }
             }
-            if (guessedLetters.length == 0) {
+            if (newGuess) {
                 guessedLetters.push(input);
+                console.log("e");
+            } else if (guessedLetters.length === 0) {
                 newGuess = true;
+                guessedLetters.push(input);
+                console.log("b");
             } else {
-                guessedLetters.push(input);
                 newGuess = true;
             }
 
-            if (!newGuess) {
-                console.log("You guessed this letter already!  Try again.");
+            replaceLetter(userInput);
+            gameScoreUpdate();
+        }
 
-            }
-            console.log("Guessed Letters NEW List Length: " + guessedLetters.length);
-        };
 
+        //Death toggle gets tripped if the userInput letter doesn't find a match in the currentWordArray.   
         function replaceLetter(input) {
 
-            //Death toggle gets tripped if the userInput letter doesn't find a match in the currentWordArray.  
             var deathToggle = false;
 
             //Check if input letter is part of the current word
@@ -347,72 +357,35 @@
         }
 
 
-        function gameStatusUpdate() {
-
+        function gameScoreUpdate() {
             //checks if YOU LOST!
             if (hangmanDeath == gameOverValue) {
-                //newPElement.textContent = "You DIED";
-                // game.appendChild(newPElement);
-                console.log("You DIED!")
                 hangmanDeath = 0;
                 score = 0;
+                guessedLetters = [];
                 document.body.style.backgroundImage = "url('https://tccandlesandmore.com/wp-content/uploads/2017/01/zen-space.jpg')"
                 gameStarted = false;
                 playGame();
 
                 //Checks if you WON!
             } else if (arrayToString(wordConstructionArray) == arrayToString(currentWordArray)) {
-                gameStarted = false;
-                score++;
                 hangmanDeath = 0;
-                //newPElement.textContent = "You WON";
-                //game.appendChild(newPElement);
+                gameStarted = false;
+                guessedLetters = [];
+                score++;
                 console.log("you won!");
                 document.body.style.backgroundImage = "url('')";
                 playGame();
+
             } else {
-
                 //STATUS UPDATE
-                //newPElement.textContent = "Your word is: " + arrayToString(wordConstructionArray) + " Type a letter to guess. " + " Current Score: " + score + " Hangman is this close to death " + hangmanDeath + " Guessed Letters so Far: " + arrayToString(guessedLetters);
-                //game.appendChild(newPElement);
-                console.log("Word Construction: " + arrayToString(wordConstructionArray));
-                console.log("Current word: " + arrayToString(currentWordArray));
-                console.log("Current Score: " + score);
-                console.log("Hangman is this close to death: " + hangmanDeath);
-
-                //Guessed Letters HTML :
-                console.log("Guessed letters so far: " + arrayToString(guessedLetters));
-                guessedLettersContent.textContent = "Gsd Ltrs: " + arrayToString(guessedLetters);
-                guessedLettersContent.classList.add("text-center")
-                guessedLettersTarget.appendChild(guessedLettersContent);
-
-                //Partial Word HTML :
-                console.log("Word Status: " + arrayToString(wordConstructionArray));
-                mainWordContent.textContent = arrayToString(wordConstructionArray);
-                mainWordContent.classList.add("text-center")
-                mainWordTarget.appendChild(mainWordContent);
-
-                //Player Score HTML
-                playerScoreContent.textContent = "Yr Scr: " + score;
-                playerScoreContent.classList.add("text-center")
-                playerScoreTarget.appendChild(playerScoreContent);
-
-                //Hangman HTML 
-                hangmanScore();
+                updateHTML();
             }
         }
 
-        // This function is run whenever the user presses a key.
-        document.onkeyup = function (event) {
-
-            // Determines which key was pressed.
-            userInput = event.key;
-            playGame();
-        };
 
 
     </script>
-
 </body>
 
 </html>
