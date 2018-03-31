@@ -4,6 +4,7 @@
 //3. random image backgrounds... tie into minimalism?
 //4. Store 'used' words in a new array to prevent words from being used a second time
 //5. Sick ambient background music that starts off but has a jquery play/pause button
+//6. Duplicate letter guess bug (hangman death goes up if dupe letter is pressed) popped up again sometime recently :(
 
 //Last things:  1. Add a readme.md to repository describing project,2 . add the project to portfolio page.  3. add link in the homework submission in bootcampspot.  
 
@@ -26,6 +27,9 @@ var playerScoreContent = document.createElement("h4");
 var hangmanDeathTarget = document.getElementById("hangman-death-container");
 var hangmanDeathContent = document.createElement("h1");
 
+//icons
+
+var lettersIconTarget = document.getElementById("letters-icon")
 //misc html
 var gameTitleTarget = document.getElementById("game-title");
 var gameInstructionsTarget = document.getElementById("game-instructions");
@@ -86,6 +90,7 @@ function playGame() {
     if (gameStarted === false) {
         gameTitleTarget.style.display = "none";
         gameInstructionsTarget.style.display = "none";
+
         wordGenerator();
         gameStarted = true;
     } else if (gameStarted) {
@@ -132,7 +137,6 @@ function wordGenerator() {
 //4. Checks if input letter is already in the guessed letter array- if it's not, it's added to this array
 function letterGuessUsed(input) {
     var newGuess = true;
-
     for (var i = 0; i < guessedLetters.length; i++) {
         if (input == guessedLetters[i]) {
             newGuess = false;
